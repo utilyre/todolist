@@ -26,6 +26,7 @@ func main() {
 			handler.SetupCreateTodoHandler,
 			handler.SetupGetTodosHandler,
 			handler.SetupGetTodoHandler,
+			handler.SetupUpdateTodoHandler,
 		),
 	).Run()
 }
