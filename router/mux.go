@@ -11,7 +11,7 @@ import (
 func New(lc fx.Lifecycle) *mux.Router {
 	router := mux.NewRouter()
 	server := http.Server{
-		Addr: ":5000",
+		Addr:    ":5000",
 		Handler: router,
 	}
 
