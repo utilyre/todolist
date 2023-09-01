@@ -19,7 +19,7 @@ COPY --from=builder /app/migrations $DB_MIGR
 
 ENV DB_PATH=/var/lib/sqlite/data
 ENV BE_HOST=0.0.0.0
-ENV BE_PORT=3000
+ENV BE_PORT=80
 
 RUN curl -fsSL https://raw.githubusercontent.com/pressly/goose/master/install.sh | sh -s v3.15.0
 RUN mkdir -p $(basename $DB_PATH)

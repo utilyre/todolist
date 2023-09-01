@@ -13,7 +13,7 @@ Basic todo backend powered by gorilla/mux 🦍
 2. Run the docker image you just built
 
     ```bash
-    docker run todolist
+    docker run -p 3000:80 todolist
     ```
 
 ## Development
