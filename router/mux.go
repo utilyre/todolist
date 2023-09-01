@@ -2,7 +2,9 @@ package router
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"go.uber.org/fx"
@@ -11,7 +13,10 @@ import (
 func New(lc fx.Lifecycle) *mux.Router {
 	router := mux.NewRouter()
 	server := http.Server{
-		Addr:    ":5000",
+		Addr: fmt.Sprintf(
+			"%s:%s",
+			os.Getenv("BE_HOST"), os.Getenv("BE_PORT"),
+		),
 		Handler: router,
 	}
 
