@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -12,8 +13,13 @@ import (
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatalln("ERROR: godotenv:", err)
+	env := flag.String("env", "", ".env file to load")
+	flag.Parse()
+
+	if *env != "" {
+		if err := godotenv.Load(*env); err != nil {
+			log.Fatalln("ERROR: godotenv:", err)
+		}
 	}
 
 	fx.New(

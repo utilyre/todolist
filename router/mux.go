@@ -3,6 +3,7 @@ package router
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -11,11 +12,21 @@ import (
 )
 
 func New(lc fx.Lifecycle) *mux.Router {
+	host, ok := os.LookupEnv("BE_HOST")
+	if !ok {
+		log.Fatalln("ERROR: router: cannot find BE_HOST environment variable")
+	}
+
+	port, ok := os.LookupEnv("BE_PORT")
+	if !ok {
+		log.Fatalln("ERROR: router: cannot find BE_PORT environment variable")
+	}
+
 	router := mux.NewRouter()
 	server := http.Server{
 		Addr: fmt.Sprintf(
 			"%s:%s",
-			os.Getenv("BE_HOST"), os.Getenv("BE_PORT"),
+			host, port,
 		),
 		Handler: router,
 	}

@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -16,7 +17,12 @@ type Database struct {
 }
 
 func New(lc fx.Lifecycle) *Database {
-	database := &Database{DSN: os.Getenv("DB_PATH")}
+	path, ok := os.LookupEnv("DB_PATH")
+	if !ok {
+		log.Fatalln("ERROR: router: cannot find DB_PATH environment variable")
+	}
+
+	database := &Database{DSN: path}
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {

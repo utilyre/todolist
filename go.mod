@@ -1,6 +1,6 @@
 module github.com/utilyre/todolist
 
-go 1.21.0
+go 1.20
 
 require (
 	github.com/go-playground/validator/v10 v10.15.3
