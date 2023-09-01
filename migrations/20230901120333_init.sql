@@ -2,7 +2,7 @@
 -- +goose StatementBegin
 CREATE TABLE "todos" (
     "id" integer PRIMARY KEY,
-    "title" varchar(16),
+    "title" varchar(16) NOT NULL,
     "body" varchar(1024)
 );
 -- +goose StatementEnd

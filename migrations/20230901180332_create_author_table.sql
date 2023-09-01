@@ -2,9 +2,9 @@
 -- +goose StatementBegin
 CREATE TABLE "authors" (
     "id" integer PRIMARY KEY,
-    "name" varchar(255),
-    "email" varchar(255),
-    "password" char(60)
+    "name" varchar(255) UNIQUE NOT NULL,
+    "email" varchar(255) UNIQUE NOT NULL,
+    "password" char(60) NOT NULL
 );
 
 ALTER TABLE "todos"
