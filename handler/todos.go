@@ -140,7 +140,8 @@ type UpdateTodoHandler struct {
 
 func SetupUpdateTodoHandler(r *mux.Router, s storage.TodosStorage) {
 	r.Handle("/todos/{id:[0-9]+}", UpdateTodoHandler{storage: s}).
-		Methods(http.MethodPut)
+		Methods(http.MethodPut).
+		Headers("Content-Type", "application/json")
 }
 
 var _ http.Handler = UpdateTodoHandler{}
