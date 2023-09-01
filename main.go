@@ -20,9 +20,12 @@ func main() {
 		fx.Provide(
 			database.New,
 			router.New,
+			storage.NewAuthorsStorage,
 			storage.NewTodosStorage,
 		),
 		fx.Invoke(
+			handler.SetupSignUpAuthorHandler,
+
 			handler.SetupCreateTodoHandler,
 			handler.SetupGetTodosHandler,
 			handler.SetupGetTodoHandler,
