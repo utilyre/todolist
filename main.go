@@ -25,6 +25,7 @@ func main() {
 		fx.Invoke(
 			handler.NewCreateTodoHandler,
 			handler.NewGetTodosHandler,
+			handler.NewGetTodoHandler,
 		),
 	).Run()
 }

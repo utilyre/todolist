@@ -3,7 +3,7 @@ package storage
 import "github.com/utilyre/todolist/database"
 
 type Todo struct {
-	ID    uint   `json:"id" db:"id"`
+	ID    uint64 `json:"id" db:"id"`
 	Title string `json:"title" db:"title"`
 	Body  string `json:"body" db:"body"`
 }
@@ -16,7 +16,7 @@ func NewTodosStorage(d *database.Database) TodosStorage {
 	return TodosStorage{database: d}
 }
 
-func (s TodosStorage) Create(title, body string) (int64, error) {
+func (s TodosStorage) Create(title, body string) (uint64, error) {
 	query := `
 	INSERT INTO "todos"
 	("title", "body")
@@ -28,7 +28,12 @@ func (s TodosStorage) Create(title, body string) (int64, error) {
 		return 0, err
 	}
 
-	return r.LastInsertId()
+	id, err := r.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	return uint64(id), nil
 }
 
 func (s TodosStorage) GetAll() ([]Todo, error) {
@@ -43,4 +48,19 @@ func (s TodosStorage) GetAll() ([]Todo, error) {
 	}
 
 	return todos, nil
+}
+
+func (s TodosStorage) Get(id uint64) (*Todo, error) {
+	query := `
+	SELECT "id", "title", "body"
+	FROM "todos"
+	WHERE "id" = ?;
+	`
+
+	todo := new(Todo)
+	if err := s.database.DB.Get(todo, query, id); err != nil {
+		return nil, err
+	}
+
+	return todo, nil
 }
