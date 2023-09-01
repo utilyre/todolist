@@ -188,3 +188,35 @@ func (h UpdateTodoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(fmt.Sprintf("%d rows affected", affected)))
 }
+
+type DeleteTodoHandler struct {
+	storage storage.TodosStorage
+}
+
+func SetupDeleteTodoHandler(r *mux.Router, s storage.TodosStorage) {
+	r.Handle("/todos/{id:[0-9]+}", DeleteTodoHandler{storage: s}).
+		Methods(http.MethodDelete)
+}
+
+var _ http.Handler = DeleteTodoHandler{}
+
+func (h DeleteTodoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.ParseUint(vars["id"], 10, 0)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	affected, err := h.storage.Delete(id)
+	if err != nil {
+		log.Println("WARN: DeleteTodoHandler:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Internal Server Error"))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(fmt.Sprintf("%d rows affected", affected)))
+}

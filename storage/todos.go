@@ -85,3 +85,23 @@ func (s TodosStorage) Update(todo *Todo) (uint64, error) {
 
 	return uint64(affected), nil
 }
+
+func (s TodosStorage) Delete(id uint64) (uint64, error) {
+	query := `
+	DELETE
+	FROM "todos"
+	WHERE "id" = ?;
+	`
+
+	r, err := s.database.DB.Exec(query, id)
+	if err != nil {
+		return 0, err
+	}
+
+	affected, err := r.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+
+	return uint64(affected), nil
+}
