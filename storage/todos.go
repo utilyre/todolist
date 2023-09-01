@@ -16,11 +16,11 @@ func NewTodosStorage(d *database.Database) TodosStorage {
 func (s TodosStorage) Create(todo *model.Todo) error {
 	query := `
 	INSERT INTO "todos"
-	("title", "body")
-	VALUES (?, ?);
+	("author_id", "title", "body")
+	VALUES (?, ?, ?);
 	`
 
-	r, err := s.database.DB.Exec(query, todo.Title, todo.Body)
+	r, err := s.database.DB.Exec(query, todo.AuthorID, todo.Title, todo.Body)
 	if err != nil {
 		return err
 	}
@@ -36,7 +36,7 @@ func (s TodosStorage) Create(todo *model.Todo) error {
 
 func (s TodosStorage) GetAll() ([]model.Todo, error) {
 	query := `
-	SELECT "id", "title", "body"
+	SELECT "id", "author_id", "title", "body"
 	FROM "todos";
 	`
 
@@ -50,7 +50,7 @@ func (s TodosStorage) GetAll() ([]model.Todo, error) {
 
 func (s TodosStorage) Get(id uint64) (*model.Todo, error) {
 	query := `
-	SELECT "id", "title", "body"
+	SELECT "id", "author_id", "title", "body"
 	FROM "todos"
 	WHERE "id" = ?;
 	`
