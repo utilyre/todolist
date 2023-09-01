@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
+	"github.com/utilyre/todolist/model"
 	"github.com/utilyre/todolist/storage"
 )
 
@@ -27,15 +27,8 @@ func SetupCreateTodoHandler(r *mux.Router, s storage.TodosStorage) {
 var _ http.Handler = CreateTodoHandler{}
 
 func (h CreateTodoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	todo := new(storage.Todo)
-	if err := json.NewDecoder(r.Body).Decode(todo); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
-		return
-	}
-
-	validate := validator.New()
-	if err := validate.Struct(todo); err != nil {
+	todo := new(model.Todo)
+	if err := todo.DecodeAndValidate(r.Body); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
@@ -153,8 +146,8 @@ func SetupUpdateTodoHandler(r *mux.Router, s storage.TodosStorage) {
 var _ http.Handler = UpdateTodoHandler{}
 
 func (h UpdateTodoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	todo := new(storage.Todo)
-	if err := json.NewDecoder(r.Body).Decode(todo); err != nil {
+	todo := new(model.Todo)
+	if err := todo.DecodeAndValidate(r.Body); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
@@ -169,13 +162,6 @@ func (h UpdateTodoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	todo.ID = id
-
-	validate := validator.New()
-	if err := validate.Struct(todo); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
-		return
-	}
 
 	affected, err := h.storage.Update(todo)
 	if err != nil {

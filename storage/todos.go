@@ -1,12 +1,9 @@
 package storage
 
-import "github.com/utilyre/todolist/database"
-
-type Todo struct {
-	ID    uint64 `json:"id" db:"id"`
-	Title string `json:"title" validate:"required,max=16" db:"title"`
-	Body  string `json:"body" validate:"max=1024" db:"body"`
-}
+import (
+	"github.com/utilyre/todolist/database"
+	"github.com/utilyre/todolist/model"
+)
 
 type TodosStorage struct {
 	database *database.Database
@@ -16,7 +13,7 @@ func NewTodosStorage(d *database.Database) TodosStorage {
 	return TodosStorage{database: d}
 }
 
-func (s TodosStorage) Create(todo *Todo) error {
+func (s TodosStorage) Create(todo *model.Todo) error {
 	query := `
 	INSERT INTO "todos"
 	("title", "body")
@@ -37,13 +34,13 @@ func (s TodosStorage) Create(todo *Todo) error {
 	return nil
 }
 
-func (s TodosStorage) GetAll() ([]Todo, error) {
+func (s TodosStorage) GetAll() ([]model.Todo, error) {
 	query := `
 	SELECT "id", "title", "body"
 	FROM "todos";
 	`
 
-	todos := []Todo{}
+	todos := []model.Todo{}
 	if err := s.database.DB.Select(&todos, query); err != nil {
 		return nil, err
 	}
@@ -51,14 +48,14 @@ func (s TodosStorage) GetAll() ([]Todo, error) {
 	return todos, nil
 }
 
-func (s TodosStorage) Get(id uint64) (*Todo, error) {
+func (s TodosStorage) Get(id uint64) (*model.Todo, error) {
 	query := `
 	SELECT "id", "title", "body"
 	FROM "todos"
 	WHERE "id" = ?;
 	`
 
-	todo := new(Todo)
+	todo := new(model.Todo)
 	if err := s.database.DB.Get(todo, query, id); err != nil {
 		return nil, err
 	}
@@ -66,7 +63,7 @@ func (s TodosStorage) Get(id uint64) (*Todo, error) {
 	return todo, nil
 }
 
-func (s TodosStorage) Update(todo *Todo) (uint64, error) {
+func (s TodosStorage) Update(todo *model.Todo) (uint64, error) {
 	query := `
 	UPDATE "todos"
 	SET "title" = ?, "body" = ?
