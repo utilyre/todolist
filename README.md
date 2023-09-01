@@ -7,6 +7,7 @@ Basic todo backend powered by gorilla/mux 🦍
 1. Migrate sqlite3 database
 
     ```bash
+    mkdir -p sqlite
     goose -dir migrations sqlite3 sqlite/todolist.db up
     ```
 
