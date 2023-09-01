@@ -23,9 +23,9 @@ func main() {
 			storage.NewTodosStorage,
 		),
 		fx.Invoke(
-			handler.NewCreateTodoHandler,
-			handler.NewGetTodosHandler,
-			handler.NewGetTodoHandler,
+			handler.SetupCreateTodoHandler,
+			handler.SetupGetTodosHandler,
+			handler.SetupGetTodoHandler,
 		),
 	).Run()
 }

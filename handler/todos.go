@@ -17,7 +17,7 @@ type CreateTodoHandler struct {
 	storage storage.TodosStorage
 }
 
-func NewCreateTodoHandler(r *mux.Router, s storage.TodosStorage) {
+func SetupCreateTodoHandler(r *mux.Router, s storage.TodosStorage) {
 	r.Handle("/todos", CreateTodoHandler{storage: s}).
 		Methods(http.MethodPost).
 		Headers("Content-Type", "application/json")
@@ -74,7 +74,7 @@ type GetTodosHandler struct {
 	storage storage.TodosStorage
 }
 
-func NewGetTodosHandler(r *mux.Router, s storage.TodosStorage) {
+func SetupGetTodosHandler(r *mux.Router, s storage.TodosStorage) {
 	r.Handle("/todos", GetTodosHandler{storage: s}).
 		Methods(http.MethodGet)
 }
@@ -107,7 +107,7 @@ type GetTodoHandler struct {
 	storage storage.TodosStorage
 }
 
-func NewGetTodoHandler(r *mux.Router, s storage.TodosStorage) {
+func SetupGetTodoHandler(r *mux.Router, s storage.TodosStorage) {
 	r.Handle("/todos/{id:[0-9]+}", GetTodoHandler{storage: s}).
 		Methods(http.MethodGet)
 }
