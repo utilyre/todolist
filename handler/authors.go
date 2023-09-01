@@ -58,11 +58,9 @@ func (h SignUpAuthorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := json.Marshal(map[string]any{
-		"id":    author.ID,
-		"name":  author.Name,
-		"email": author.Email,
-	})
+	author.Password = ""
+
+	resp, err := json.Marshal(author)
 	if err != nil {
 		log.Println("WARN: SignUpAuthorHandler:", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -72,5 +70,38 @@ func (h SignUpAuthorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
+	w.Write(resp)
+}
+
+type GetAuthorsHandler struct {
+	storage storage.AuthorsStorage
+}
+
+func SetupGetAuthorsHandler(r *mux.Router, s storage.AuthorsStorage) {
+	r.Handle("/authors", GetAuthorsHandler{storage: s}).
+		Methods(http.MethodGet)
+}
+
+var _ http.Handler = GetAuthorsHandler{}
+
+func (h GetAuthorsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	authors, err := h.storage.GetAll()
+	if err != nil {
+		log.Println("WARN: GetAuthorsHandler:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Internal Server Error"))
+		return
+	}
+
+	resp, err := json.Marshal(authors)
+	if err != nil {
+		log.Println("WARN: GetAuthorsHandler:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Internal Server Error"))
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	w.Write(resp)
 }

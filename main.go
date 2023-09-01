@@ -25,6 +25,7 @@ func main() {
 		),
 		fx.Invoke(
 			handler.SetupSignUpAuthorHandler,
+			handler.SetupGetAuthorsHandler,
 
 			handler.SetupCreateTodoHandler,
 			handler.SetupGetTodosHandler,

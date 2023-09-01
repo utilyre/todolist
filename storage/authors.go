@@ -33,3 +33,17 @@ func (s AuthorsStorage) Create(author *model.Author) error {
 	author.ID = uint64(id)
 	return nil
 }
+
+func (s AuthorsStorage) GetAll() ([]model.Author, error) {
+	query := `
+	SELECT "id", "name", "email"
+	FROM "authors";
+	`
+
+	authors := []model.Author{}
+	if err := s.database.DB.Select(&authors, query); err != nil {
+		return nil, err
+	}
+
+	return authors, nil
+}
