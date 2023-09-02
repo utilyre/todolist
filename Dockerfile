@@ -12,11 +12,12 @@ RUN CGO_ENABLED=1 GOOS=linux go build -o todolist
 
 FROM alpine:3.18
 
-ARG DB_MIGR=/app/migrations
+ARG DB_MIGR=/var/lib/sqlite/migrations
 
 COPY --from=builder /app/todolist /usr/bin/todolist
 COPY --from=builder /app/migrations $DB_MIGR
 
+ENV MODE=prod
 ENV DB_PATH=/var/lib/sqlite/data
 ENV BE_HOST=0.0.0.0
 ENV BE_PORT=80

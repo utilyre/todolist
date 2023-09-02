@@ -1,10 +1,7 @@
 package main
 
 import (
-	"flag"
-	"log"
-
-	"github.com/joho/godotenv"
+	"github.com/utilyre/todolist/config"
 	"github.com/utilyre/todolist/database"
 	"github.com/utilyre/todolist/handler"
 	"github.com/utilyre/todolist/router"
@@ -13,19 +10,12 @@ import (
 )
 
 func main() {
-	env := flag.String("env", "", ".env file to load")
-	flag.Parse()
-
-	if *env != "" {
-		if err := godotenv.Load(*env); err != nil {
-			log.Fatalln("ERROR: godotenv:", err)
-		}
-	}
-
 	fx.New(
 		fx.Provide(
+			config.New,
 			database.New,
 			router.New,
+
 			storage.NewAuthorsStorage,
 			storage.NewTodosStorage,
 		),

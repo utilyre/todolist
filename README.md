@@ -25,7 +25,7 @@ Basic todo backend powered by gorilla/mux 🦍
     goose -dir migrations sqlite3 sqlite/todolist.db up
     ```
 
-2. Create a `.env.local` file with the following content
+2. Create a `.env` file with the following content
 
     ```bash
     DB_PATH=sqlite/todolist.db
@@ -34,8 +34,8 @@ Basic todo backend powered by gorilla/mux 🦍
     BE_PORT=3000
     ```
 
-3. Run the app passing the `.env.local` file
+3. Run the app in `dev` mode
 
     ```bash
-    go run main.go -env .env.local
+    MODE=dev go run main.go
     ```

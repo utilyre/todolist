@@ -3,30 +3,19 @@ package router
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
-	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/utilyre/todolist/config"
 	"go.uber.org/fx"
 )
 
-func New(lc fx.Lifecycle) *mux.Router {
-	host, ok := os.LookupEnv("BE_HOST")
-	if !ok {
-		log.Fatalln("ERROR: router: cannot find BE_HOST environment variable")
-	}
-
-	port, ok := os.LookupEnv("BE_PORT")
-	if !ok {
-		log.Fatalln("ERROR: router: cannot find BE_PORT environment variable")
-	}
-
+func New(lc fx.Lifecycle, c config.Config) *mux.Router {
 	router := mux.NewRouter()
 	server := http.Server{
 		Addr: fmt.Sprintf(
 			"%s:%s",
-			host, port,
+			c.BEHost, c.BEPort,
 		),
 		Handler: router,
 	}

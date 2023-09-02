@@ -2,12 +2,12 @@ package database
 
 import (
 	"context"
-	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/utilyre/todolist/config"
 	"go.uber.org/fx"
 )
 
@@ -16,13 +16,8 @@ type Database struct {
 	DB  *sqlx.DB
 }
 
-func New(lc fx.Lifecycle) *Database {
-	path, ok := os.LookupEnv("DB_PATH")
-	if !ok {
-		log.Fatalln("ERROR: router: cannot find DB_PATH environment variable")
-	}
-
-	database := &Database{DSN: path}
+func New(lc fx.Lifecycle, c config.Config) *Database {
+	database := &Database{DSN: c.DBPath}
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
