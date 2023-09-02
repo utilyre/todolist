@@ -21,6 +21,7 @@ ENV MODE=prod
 ENV DB_PATH=/var/lib/sqlite/data
 ENV BE_HOST=0.0.0.0
 ENV BE_PORT=80
+ENV BE_SECRET=secret
 
 RUN curl -fsSL https://raw.githubusercontent.com/pressly/goose/master/install.sh | sh -s v3.15.0
 RUN mkdir -p $(basename $DB_PATH)

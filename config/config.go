@@ -20,8 +20,9 @@ type Config struct {
 
 	DBPath string
 
-	BEHost string
-	BEPort string
+	BEHost   string
+	BEPort   string
+	BESecret []byte
 }
 
 func New() Config {
@@ -53,10 +54,11 @@ func New() Config {
 	}
 
 	return Config{
-		Mode:   mode,
-		DBPath: getenvOrExit(envMap, "DB_PATH"),
-		BEHost: getenvOrExit(envMap, "BE_HOST"),
-		BEPort: getenvOrExit(envMap, "BE_PORT"),
+		Mode:     mode,
+		DBPath:   getenvOrExit(envMap, "DB_PATH"),
+		BEHost:   getenvOrExit(envMap, "BE_HOST"),
+		BEPort:   getenvOrExit(envMap, "BE_PORT"),
+		BESecret: []byte(getenvOrExit(envMap, "BE_SECRET")),
 	}
 }
 

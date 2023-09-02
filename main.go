@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/utilyre/todolist/auth"
 	"github.com/utilyre/todolist/config"
 	"github.com/utilyre/todolist/database"
 	"github.com/utilyre/todolist/handler"
@@ -13,6 +14,7 @@ func main() {
 	fx.New(
 		fx.Provide(
 			config.New,
+			auth.New,
 			database.New,
 			router.New,
 
