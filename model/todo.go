@@ -14,13 +14,13 @@ type Todo struct {
 	Body     string `json:"body" validate:"max=1024" db:"body"`
 }
 
-func (t *Todo) DecodeAndValidate(r io.Reader) error {
+func (t *Todo) DecodeAndValidate(r io.Reader, exceptions ...string) error {
 	if err := json.NewDecoder(r).Decode(t); err != nil {
 		return err
 	}
 
 	validate := validator.New()
-	if err := validate.Struct(t); err != nil {
+	if err := validate.StructExcept(t, exceptions...); err != nil {
 		return err
 	}
 

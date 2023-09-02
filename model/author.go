@@ -14,13 +14,13 @@ type Author struct {
 	Password string `json:"password" validate:"required,min=8,max=255" db:"password"`
 }
 
-func (a *Author) DecodeAndValidate(r io.Reader) error {
+func (a *Author) DecodeAndValidate(r io.Reader, exceptions ...string) error {
 	if err := json.NewDecoder(r).Decode(a); err != nil {
 		return err
 	}
 
 	validate := validator.New()
-	if err := validate.Struct(a); err != nil {
+	if err := validate.StructExcept(a, exceptions...); err != nil {
 		return err
 	}
 

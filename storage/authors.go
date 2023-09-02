@@ -47,3 +47,18 @@ func (s AuthorsStorage) GetAll() ([]model.Author, error) {
 
 	return authors, nil
 }
+
+func (s AuthorsStorage) GetByName(name string) (*model.Author, error) {
+	query := `
+	SELECT "id", "email", "password"
+	FROM "authors"
+	WHERE "name" = ?;
+	`
+
+	author := new(model.Author)
+	if err := s.database.DB.Get(author, query, name); err != nil {
+		return nil, err
+	}
+
+	return author, nil
+}
